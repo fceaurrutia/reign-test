@@ -1,0 +1,1 @@
+The component i use for layout purposes, such as Public, Private or for specific areas of the website.
