@@ -1,0 +1,1 @@
+I usually make "Views" folders which is where i put all the Components combined to make a specific view, it basically is the component that is called when a route matches.
