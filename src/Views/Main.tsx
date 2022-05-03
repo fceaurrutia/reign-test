@@ -21,6 +21,7 @@ import {
 	IconButton,
 	StyledFormControl,
 } from "../Assets/Views/MainStyled";
+import InfiniteScrollTable from "../Components/InfiniteScrollTable";
 import Table from "../Components/Table";
 
 function Main() {
@@ -31,15 +32,18 @@ function Main() {
 	const [query, setQuery] = useState<string | null>(
 		localStorage.getItem("query"),
 	);
+
 	const handleChangeView = (type: string) => {
 		setSelectedView(type);
 		localStorage.setItem("view", type);
 	};
+
 	const swapMode = () => {
 		const swappedMode = mode === "pagination" ? "scroll" : "pagination";
 		setMode(swappedMode);
 		localStorage.setItem("mode", swappedMode);
 	};
+
 	const handleChangeSelectFilter = (e: SelectChangeEvent<unknown>) => {
 		const {
 			target: { value },
@@ -72,7 +76,11 @@ function Main() {
 				</Selection>
 				<Selection
 					active={selectedView === "favorites" ? "favorites" : null}
-					onClick={() => handleChangeView("favorites")}>
+					onClick={() => {
+						setMode("pagination");
+						localStorage.setItem("mode", "pagination");
+						handleChangeView("favorites");
+					}}>
 					<p>My Faves</p>
 				</Selection>
 			</SelectorContainer>
@@ -101,27 +109,32 @@ function Main() {
 						))}
 					</Select>
 				</StyledFormControl>
-
-				<Mode>
-					{mode === "pagination" ? (
-						<>
-							Pagination
-							<IconButton onClick={swapMode}>
-								<PaginationIcon />
-							</IconButton>
-						</>
-					) : (
-						<>
-							Infinite Scroll
-							<IconButton onClick={swapMode}>
-								<ListIcon />
-							</IconButton>
-						</>
-					)}
-				</Mode>
+				{selectedView === "all" ? (
+					<Mode>
+						{mode === "pagination" ? (
+							<>
+								Pagination
+								<IconButton onClick={swapMode}>
+									<PaginationIcon />
+								</IconButton>
+							</>
+						) : (
+							<>
+								Infinite Scroll
+								<IconButton onClick={swapMode}>
+									<ListIcon />
+								</IconButton>
+							</>
+						)}
+					</Mode>
+				) : null}
 			</FilterContainer>
 			<TableContainer>
-				<Table mode={mode} view={selectedView} query={query} />
+				{mode === "pagination" ? (
+					<Table view={selectedView} query={query} />
+				) : (
+					<InfiniteScrollTable query={query} />
+				)}
 			</TableContainer>
 		</>
 	);
