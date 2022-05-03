@@ -3,7 +3,13 @@ import {
 	List as ListIcon,
 	AutoStories as PaginationIcon,
 } from "@mui/icons-material";
-import { MenuItem, SelectChangeEvent } from "@mui/material";
+import {
+	MenuItem,
+	SelectChangeEvent,
+	Select,
+	InputLabel,
+	OutlinedInput,
+} from "@mui/material";
 import { FilterOptions } from "../staticVariables";
 import {
 	Title,
@@ -13,7 +19,7 @@ import {
 	FilterContainer,
 	Mode,
 	IconButton,
-	StyledSelect,
+	StyledFormControl,
 } from "../Assets/Views/MainStyled";
 import Table from "../Components/Table";
 
@@ -45,10 +51,6 @@ function Main() {
 			setSelectedView("all");
 			localStorage.setItem("view", "all");
 		}
-		if (query === null) {
-			setQuery("angular");
-			localStorage.setItem("query", "angular");
-		}
 		if (mode === null) {
 			setMode("pagination");
 			localStorage.setItem("mode", "pagination");
@@ -62,33 +64,42 @@ function Main() {
 			</Title>
 			<SelectorContainer>
 				<Selection
-					active={selectedView === "all"}
+					active={selectedView === "all" ? "all" : null}
 					onClick={() => handleChangeView("all")}>
 					<p>All</p>
 				</Selection>
 				<Selection
-					active={selectedView === "favorites"}
+					active={selectedView === "favorites" ? "favorites" : null}
 					onClick={() => handleChangeView("favorites")}>
 					<p>My Faves</p>
 				</Selection>
 			</SelectorContainer>
 			<FilterContainer>
-				<StyledSelect value={query} onChange={handleChangeSelectFilter}>
-					{FilterOptions.map((x) => (
-						<MenuItem value={x.value}>
-							<div
-								style={{
-									display: "flex",
-									alignItems: "center",
-									textAlign: "center",
-									gridGap: 10,
-								}}>
-								<img src={x.icon} alt="icon" style={{ width: "24px" }} />
-								{x.label}
-							</div>
-						</MenuItem>
-					))}
-				</StyledSelect>
+				<StyledFormControl>
+					<InputLabel id="select-filter-label">Select your news</InputLabel>
+					<Select
+						id="select-filter"
+						labelId="select-filter-label"
+						value={query}
+						onChange={handleChangeSelectFilter}
+						input={<OutlinedInput label="Select your news" />}>
+						{FilterOptions.map((x, index) => (
+							<MenuItem key={`options-${index}`} value={x.value}>
+								<div
+									style={{
+										display: "flex",
+										alignItems: "center",
+										textAlign: "center",
+										gridGap: 10,
+									}}>
+									<img src={x.icon} alt="icon" style={{ width: "24px" }} />
+									{x.label}
+								</div>
+							</MenuItem>
+						))}
+					</Select>
+				</StyledFormControl>
+
 				<Mode>
 					{mode === "pagination" ? (
 						<>
@@ -108,7 +119,7 @@ function Main() {
 				</Mode>
 			</FilterContainer>
 			<TableContainer>
-				<Table />
+				<Table mode={mode} view={selectedView} query={query} />
 			</TableContainer>
 		</>
 	);
