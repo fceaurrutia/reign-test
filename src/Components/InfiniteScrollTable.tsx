@@ -12,7 +12,7 @@ import {
 } from "../Redux/Reducers/PostSlice";
 import Item from "./Item";
 
-interface Props {
+export interface Props {
 	query: string | null;
 }
 

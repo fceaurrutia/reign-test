@@ -9,26 +9,29 @@
 		"@mui/material": "^5.6.4",
 		"@reduxjs/toolkit": "^1.8.1",
 		"@testing-library/jest-dom": "^5.16.4",
-		"@testing-library/react": "^13.1.1",
+		"@testing-library/react": "^13.2.0",
 		"@testing-library/user-event": "^13.5.0",
-		"@types/jest": "^27.4.1",
+		"@types/jest": "^27.5.0",
 		"@types/node": "^16.11.33",
 		"@types/react": "^18.0.8",
 		"@types/react-dom": "^18.0.3",
 		"axios": "^0.27.2",
+		"jest": "^28.0.3",
 		"react": "^18.1.0",
 		"react-dom": "^18.1.0",
 		"react-redux": "^8.0.1",
 		"react-scripts": "5.0.1",
 		"redux": "^4.2.0",
 		"redux-thunk": "^2.4.1",
+		"ts-jest": "^28.0.1",
 		"typescript": "^4.6.4",
 		"web-vitals": "^2.1.4"
 	},
 	"scripts": {
 		"start": "react-scripts start",
 		"build": "react-scripts build",
-		"test": "react-scripts test",
+		"test": "npx jest",
+		"test:watch": "npx jest --watch",
 		"eject": "react-scripts eject",
 		"lint": "npx eslint src/*",
 		"lint:fix": "npx prettier --write src/* && npx eslint src/* --fix;"
@@ -58,5 +61,11 @@
 		"eslint-plugin-react": "^7.29.4",
 		"eslint-plugin-react-hooks": "^4.5.0",
 		"prettier": "^2.6.2"
+	},
+	"jest": {
+		"moduleNameMapper": {
+			"\\.(jpg|jpeg|png|svg)$": "./src/config/fileMock.js",
+			"\\.(css|scss)$": "identity-obj-proxy"
+		}
 	}
 }

@@ -10,7 +10,7 @@ import {
 } from "../Assets/Components/ItemStyled";
 import { IPost } from "../Redux/Types/Post.type";
 
-interface Props {
+export interface Props {
 	post: IPost | null;
 	reload: Function;
 }

@@ -18,7 +18,7 @@ import {
 	getPostsWithFilter,
 } from "../Redux/Reducers/PostSlice";
 
-interface Props {
+export interface Props {
 	query: string | null;
 	view: string | null;
 }
