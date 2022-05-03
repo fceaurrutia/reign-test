@@ -24,6 +24,7 @@ export default function InfiniteScrollTable(props: Props) {
 	const { posts, loading, maxPages } = useAppSelector((state) => state.posts);
 
 	const addMorePosts = () => {
+		if (currentPage >= maxPages - 1) return;
 		dispatch(
 			getPostsWithFilterScroll({
 				query: query != null ? query : "angular",
@@ -88,7 +89,23 @@ export default function InfiniteScrollTable(props: Props) {
 						<CircularProgress />
 					</div>
 				) : null}
-				{maxPages === currentPage + 1 ? "Llegaste al final " : null}
+				{currentPage >= maxPages - 1 ? (
+					<div
+						style={{
+							display: "flex",
+							justifyContent: "center",
+							alignItems: "center",
+						}}>
+						<h3
+							style={{
+								fontWeight: 800,
+								fontFamily: "Baskerville",
+								textTransform: "uppercase",
+							}}>
+							You just reached the end
+						</h3>
+					</div>
+				) : null}
 				<BackToTop scrollPosition={showScrollButton} onClick={scrollBackToTop}>
 					<KeyboardArrowUp />
 				</BackToTop>
