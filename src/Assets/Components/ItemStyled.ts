@@ -34,12 +34,12 @@ export const LeftContainer = styled("div")(({ theme }) => ({
 	width: "88%",
 }));
 
-export const TimeContainer = styled("div")(({ theme }) => ({
+export const TimeContainer = styled("div")({
 	userSelect: "none",
 	display: "flex",
 	alignItems: "center",
 	gridGap: 10,
-}));
+});
 
 export const RightContainer = styled("div")(({ theme }) => ({
 	userSelect: "none",
