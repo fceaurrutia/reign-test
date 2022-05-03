@@ -13,7 +13,7 @@ import {
 import Item from "./Item";
 import { useAppDispatch, useAppSelector } from "../Redux/Hooks";
 import {
-	selectPosts,
+	setPostsFromLocal,
 	getPostsWithoutFilter,
 	getPostsWithFilter,
 } from "../Redux/Reducers/PostSlice";
@@ -26,15 +26,23 @@ interface Props {
 
 function Table(props: Props) {
 	const { mode, query, view } = props;
+	const [isReload, setReload] = useState<number>(0);
 	const [currentPage, setCurrentPage] = useState<number>(0);
 	const dispatch = useAppDispatch();
 	const { posts, loading, maxPages } = useAppSelector((state) => state.posts);
 	const dispatchPosts = () => {
-		dispatch(
-			query != null
-				? getPostsWithFilter({ query, page: currentPage })
-				: getPostsWithoutFilter(),
-		);
+		if (view === "all") {
+			dispatch(
+				query != null
+					? getPostsWithFilter({ query, page: currentPage })
+					: getPostsWithoutFilter(),
+			);
+		} else {
+			const getFavorites = localStorage.getItem("favorites");
+			let favoritePosts = [];
+			if (getFavorites !== null) favoritePosts = JSON.parse(getFavorites);
+			dispatch(setPostsFromLocal(favoritePosts, currentPage));
+		}
 	};
 
 	const checkCurrentPage = (index: number) => {
@@ -74,9 +82,16 @@ function Table(props: Props) {
 		setCurrentPage((x) => x + 10);
 	};
 
+	const reload = () => setReload((x) => x + 1);
+
+	useEffect(() => {
+		setCurrentPage(0);
+	}, [view]);
+
 	useEffect(() => {
 		dispatchPosts();
-	}, [query, currentPage]);
+	}, [query, currentPage, view, isReload]);
+
 	return (
 		<div style={{ width: "100%" }}>
 			{loading ? (
@@ -86,10 +101,10 @@ function Table(props: Props) {
 			) : (
 				<Container>
 					{posts.map((x, index) => (
-						<Item key={`post-${index}`} post={x} />
+						<Item key={`post-${index}`} post={x} reload={reload} />
 					))}
 					{new Array(8 - posts.length).fill("discarded").map((x, index) => (
-						<Item key={`${x}-${index}`} post={null} />
+						<Item key={`${x}-${index}`} post={null} reload={reload} />
 					))}
 				</Container>
 			)}
@@ -105,6 +120,7 @@ function Table(props: Props) {
 				/>
 				{Array.from(Array(7).keys()).map((x, index) => {
 					if (index + currentPage - 3 > maxPages) return null;
+					if (view === "favorites" && index > maxPages - 1) return null;
 					return (
 						<Page
 							key={`${x}-${index}`}

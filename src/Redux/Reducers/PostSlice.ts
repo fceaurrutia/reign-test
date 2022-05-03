@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import axios from "axios";
-import { IPostState, Response } from "../Types/Post.type";
+import { IPost, IPostState, Response } from "../Types/Post.type";
 import type { RootState, AppThunk } from "../Store";
 
 const defaultState: IPostState = {
@@ -73,6 +73,21 @@ export const getPostsWithoutFilter = (): AppThunk => async (dispatch) => {
 		dispatch(setLoading(false));
 	}
 };
+
+export const setPostsFromLocal =
+	(posts: IPost[], page: number): AppThunk =>
+	(dispatch) => {
+		dispatch(setLoading(true));
+		let maxPages = Math.floor(posts.length / 8);
+		maxPages += posts.length % 8 === 0 ? 0 : 1;
+		const formattedResponse: Response = {
+			page,
+			posts: posts.slice(page * 8, (page + 1) * 8),
+			maxPages,
+		};
+		dispatch(getPosts(formattedResponse));
+		dispatch(setLoading(false));
+	};
 
 export const getPostsWithFilter =
 	(filters: IFilter): AppThunk =>

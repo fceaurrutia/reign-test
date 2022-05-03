@@ -24,15 +24,15 @@ export const Container = styled("div")(({ theme }) => ({
 		gridTemplateColumns: "repeat(2, 1fr)",
 		gridTemplateRows: "repeat(4, 1fr)",
 	},
-	gridColumnGap: "0px",
-	gridRowGap: "0px",
+	gridColumnGap: "40px",
+	gridRowGap: "30px",
 }));
 
 export const Pagination = styled("div")({
 	display: "flex",
 	justifyContent: "center",
 	alignItems: "center",
-	marginTop: 50,
+	margin: "50px 0px",
 });
 
 export const Left = styled(ChevronLeft)<{ active: string | null }>(
