@@ -18,7 +18,7 @@
 		"no-use-before-define": "off",
 		"@typescript-eslint/no-use-before-define": ["error"],
 		"react/jsx-filename-extension": ["warn", { "extensions": [".tsx"] }],
-		"indent": ["error", "tab"],
+		"indent": "off",
 		"no-tabs": ["error", { "allowIndentationTabs": true }],
 		"quotes": ["error", "double"],
 		"semi": ["error", "always"],
@@ -31,7 +31,12 @@
 				"js": "never",
 				"jsx": "never"
 			}
-		]
+		],
+		"no-unused-vars": [
+			"warn",
+			{ "vars": "all", "args": "after-used", "ignoreRestSiblings": false }
+		],
+		"no-param-reassign": 0
 	},
 	"settings": {
 		"import/resolver": {
