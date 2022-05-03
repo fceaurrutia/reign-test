@@ -33,6 +33,7 @@ function Main() {
 	);
 	const handleChangeView = (type: string) => {
 		setSelectedView(type);
+		localStorage.setItem("view", type);
 	};
 	const swapMode = () => {
 		const swappedMode = mode === "pagination" ? "scroll" : "pagination";
@@ -46,6 +47,7 @@ function Main() {
 		setQuery(value as string);
 		localStorage.setItem("query", value as string);
 	};
+
 	useEffect(() => {
 		if (selectedView === null) {
 			setSelectedView("all");
