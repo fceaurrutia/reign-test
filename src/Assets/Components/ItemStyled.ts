@@ -15,6 +15,10 @@ export const ItemContainer = styled("div")(({ theme }) => ({
 	opacity: 0.8,
 	borderRadius: "6px",
 	border: "solid 1px #979797",
+	"&:hover": {
+		opacity: 0.4,
+	},
+	transition: "0.125s all ease-in",
 }));
 
 export const LeftContainer = styled("div")(({ theme }) => ({
