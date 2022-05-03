@@ -19,13 +19,12 @@ import {
 } from "../Redux/Reducers/PostSlice";
 
 interface Props {
-	mode: string | null;
 	query: string | null;
 	view: string | null;
 }
 
 function Table(props: Props) {
-	const { mode, query, view } = props;
+	const { query, view } = props;
 	const [isReload, setReload] = useState<number>(0);
 	const [currentPage, setCurrentPage] = useState<number>(0);
 	const dispatch = useAppDispatch();
@@ -92,6 +91,10 @@ function Table(props: Props) {
 		dispatchPosts();
 	}, [query, currentPage, view, isReload]);
 
+	useEffect(() => {
+		dispatchPosts();
+	}, []);
+
 	return (
 		<div style={{ width: "100%" }}>
 			{loading ? (
@@ -103,9 +106,13 @@ function Table(props: Props) {
 					{posts.map((x, index) => (
 						<Item key={`post-${index}`} post={x} reload={reload} />
 					))}
-					{new Array(8 - posts.length).fill("discarded").map((x, index) => (
-						<Item key={`${x}-${index}`} post={null} reload={reload} />
-					))}
+					{posts.length < 8
+						? new Array(8 - posts.length)
+								.fill("discarded")
+								.map((x, index) => (
+									<Item key={`${x}-${index}`} post={null} reload={reload} />
+								))
+						: null}
 				</Container>
 			)}
 

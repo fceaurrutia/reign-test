@@ -28,10 +28,15 @@ export const postSlice = createSlice({
 			state.maxPages = payload.maxPages;
 			state.posts = payload.posts;
 		},
+		addNewPosts: (state, { payload }: PayloadAction<Response>) => {
+			state.page = payload.page;
+			state.maxPages = payload.maxPages;
+			state.posts = [...state.posts, ...payload.posts];
+		},
 	},
 });
 
-export const { getPosts, setLoading } = postSlice.actions;
+export const { getPosts, setLoading, addNewPosts } = postSlice.actions;
 
 export const getPostsWithoutFilter = (): AppThunk => async (dispatch) => {
 	try {
@@ -87,6 +92,51 @@ export const setPostsFromLocal =
 		};
 		dispatch(getPosts(formattedResponse));
 		dispatch(setLoading(false));
+	};
+
+export const getPostsWithFilterScroll =
+	(filters: IFilter): AppThunk =>
+	async (dispatch) => {
+		try {
+			dispatch(setLoading(true));
+			const { data } = await axios.get(
+				"https://hn.algolia.com/api/v1/search_by_date",
+				{
+					params: {
+						query: filters.query,
+						page: filters.page,
+						hitsPerPage: 16,
+					},
+				},
+			);
+			const formattedResponse: Response = {
+				page: data.page,
+				posts: data.hits
+					.map((x: any) => {
+						if (
+							x.story_title === null ||
+							x.story_url === null ||
+							x.author === null ||
+							x.created_at === null
+						)
+							return null;
+						return {
+							id: x.objectID,
+							title: x.story_title,
+							url: x.story_url,
+							author: x.author,
+							created_at: x.created_at,
+						};
+					})
+					.filter((x: any) => x != null),
+				maxPages: data.nbPages,
+			};
+			dispatch(addNewPosts(formattedResponse));
+		} catch (error) {
+			dispatch(setLoading(false));
+		} finally {
+			dispatch(setLoading(false));
+		}
 	};
 
 export const getPostsWithFilter =
