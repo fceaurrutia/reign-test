@@ -1,4 +1,4 @@
-import { styled, Select } from "@mui/material";
+import { styled, FormControl } from "@mui/material";
 
 export const Title = styled("div")(({ theme }) => ({
 	display: "flex",
@@ -78,7 +78,7 @@ export const IconButton = styled("div")({
 	},
 });
 
-export const Selection = styled("div")<{ active: boolean }>(
+export const Selection = styled("div")<{ active: string | null }>(
 	({ theme, active }) => ({
 		userSelect: "none",
 		cursor: "pointer",
@@ -106,18 +106,17 @@ export const Selection = styled("div")<{ active: boolean }>(
 		transition: "0.25s all ease-in",
 		"& > p": {
 			fontSize: 16,
-			fontFamily: "Roboto",
-			fontWeight: 500,
+			fontWeight: active ? 600 : 500,
 			lineHeight: 1.75,
 			fontStretch: "normal",
 			fontStyle: "normal",
 			textAlign: "center",
-			color: "#1797ff",
+			color: active ? "#1797ff" : "black",
 		},
 	}),
 );
 
-export const StyledSelect = styled(Select)(({ theme }) => ({
+export const StyledFormControl = styled(FormControl)(({ theme }) => ({
 	[theme.breakpoints.only("xs")]: {
 		width: "40%",
 	},

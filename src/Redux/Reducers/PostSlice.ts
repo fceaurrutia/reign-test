@@ -46,12 +46,24 @@ export const getPostsWithoutFilter = (): AppThunk => async (dispatch) => {
 		);
 		const formattedResponse: Response = {
 			page: data.page,
-			posts: data.hits.map((x: any) => ({
-				id: x.objectID,
-				title: x.story_title,
-				body: x.comment_text,
-				author: x.author,
-			})),
+			posts: data.hits
+				.map((x: any) => {
+					if (
+						x.story_title === null ||
+						x.story_url === null ||
+						x.author === null ||
+						x.created_at === null
+					)
+						return null;
+					return {
+						id: x.objectID,
+						title: x.story_title,
+						url: x.story_url,
+						author: x.author,
+						created_at: x.created_at,
+					};
+				})
+				.filter((x: any) => x != null),
 			maxPages: data.nbPages,
 		};
 		dispatch(getPosts(formattedResponse));
@@ -79,12 +91,24 @@ export const getPostsWithFilter =
 			);
 			const formattedResponse: Response = {
 				page: data.page,
-				posts: data.hits.map((x: any) => ({
-					id: x.objectID,
-					title: x.story_title,
-					body: x.comment_text,
-					author: x.author,
-				})),
+				posts: data.hits
+					.map((x: any) => {
+						if (
+							x.story_title === null ||
+							x.story_url === null ||
+							x.author === null ||
+							x.created_at === null
+						)
+							return null;
+						return {
+							id: x.objectID,
+							title: x.story_title,
+							url: x.story_url,
+							author: x.author,
+							created_at: x.created_at,
+						};
+					})
+					.filter((x: any) => x != null),
 				maxPages: data.nbPages,
 			};
 			dispatch(getPosts(formattedResponse));

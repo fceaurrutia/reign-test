@@ -1,8 +1,9 @@
 export interface IPost {
 	id: number;
 	title: string;
-	body: string;
 	author: string;
+	url: string;
+	created_at: string;
 }
 
 export interface Response {
