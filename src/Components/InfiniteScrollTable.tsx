@@ -1,6 +1,10 @@
 import { CircularProgress } from "@mui/material";
 import React, { useEffect, useState } from "react";
-import { Container } from "../Assets/Components/InfiniteScrollStyled";
+import { KeyboardArrowUp } from "@mui/icons-material";
+import {
+	Container,
+	BackToTop,
+} from "../Assets/Components/InfiniteScrollStyled";
 import { useAppDispatch, useAppSelector } from "../Redux/Hooks";
 import {
 	getPostsWithFilterScroll,
@@ -16,6 +20,7 @@ export default function InfiniteScrollTable(props: Props) {
 	const dispatch = useAppDispatch();
 	const { query } = props;
 	const [currentPage, setCurrentPage] = useState<number>(0);
+	const [showScrollButton, setShowScrollButton] = useState<number>(0);
 	const { posts, loading, maxPages } = useAppSelector((state) => state.posts);
 
 	const addMorePosts = () => {
@@ -36,6 +41,13 @@ export default function InfiniteScrollTable(props: Props) {
 		);
 	};
 
+	const scrollBackToTop = () => {
+		window.scrollTo({
+			top: 0,
+			behavior: "smooth",
+		});
+	};
+
 	useEffect(() => {
 		window.addEventListener("scroll", (e: Event) => {
 			if (loading) {
@@ -45,6 +57,7 @@ export default function InfiniteScrollTable(props: Props) {
 			const current = e.currentTarget as Window;
 			const documentHeight = document.body.offsetHeight;
 			const isBottom = current.scrollY + current.innerHeight === documentHeight;
+			setShowScrollButton(current.scrollY > 50 ? 1 : 0);
 			if (isBottom) setCurrentPage((x) => x + 1);
 		});
 	}, []);
@@ -76,6 +89,9 @@ export default function InfiniteScrollTable(props: Props) {
 					</div>
 				) : null}
 				{maxPages === currentPage + 1 ? "Llegaste al final " : null}
+				<BackToTop scrollPosition={showScrollButton} onClick={scrollBackToTop}>
+					<KeyboardArrowUp />
+				</BackToTop>
 			</Container>
 		</div>
 	);
