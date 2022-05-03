@@ -36,7 +36,14 @@
 			"warn",
 			{ "vars": "all", "args": "after-used", "ignoreRestSiblings": false }
 		],
-		"no-param-reassign": 0
+		"no-param-reassign": 0,
+		//Need to add this, since airbnb bugs arrow functions.
+		"react/function-component-definition": [
+			2,
+			{
+				"namedComponents": "function-declaration"
+			}
+		]
 	},
 	"settings": {
 		"import/resolver": {
