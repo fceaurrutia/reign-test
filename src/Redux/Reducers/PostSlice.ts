@@ -11,7 +11,7 @@ const defaultState: IPostState = {
 	error: "",
 };
 
-interface IFilter {
+export interface IFilter {
 	query: string;
 	page: number;
 }
